@@ -1,4 +1,8 @@
 const readline=require('readline')//built in to handle the useer inp in terminal
+const fs=require('fs')
+const HISTORY_FILE='history.txt'//define history file storing prev cmnds
+let history=fs.existsSync(HISTORY_FILE)?
+fs.readFileSync(HISTORY_FILE,"utf-8").split("\n").filter(Boolean):[];//load prev history from file if it exists
 //create interface to read ip and op in terminal
 const rl=readline.createInterface({
     input:process.stdin ,//std ip (keyboard)
@@ -17,10 +21,18 @@ function processCommand(command){
             case 'echo':
                 console.log(args.join(' '))
                 break;
+            case 'history':
+                console.log(history.join("\n"))
+                break;
             default: console.log(`Command not found:${cmd}`)
     }
+    //save cmd to history 
+    if(command.trim()){
+        history.push(command)
+        fs.appendFileSync(HISTORY_FILE,command+"\n")//append cmd to history file
+    }
 }
-rl.prompt()//strat shell promt
+rl.prompt()//start shell promt
 //listen user inp and excute cmds
 rl.on('line',(input)=>{
     processCommand(input)//process entered cmd

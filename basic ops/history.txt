@@ -1,0 +1,5 @@
+echo hello ji
+echo jqydeep 
+echo ttg
+history
+exit
